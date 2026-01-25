@@ -19,7 +19,6 @@ public class AvaliacaoEntity {
 	private String comentario;
 
 	public AvaliacaoEntity(Avaliacao avaliacao){
-		this.id = avaliacao.getId();
 		this.consultaId = avaliacao.getConsultaId();
 		this.nota = avaliacao.getNota();
 		this.comentario = avaliacao.getComentario();

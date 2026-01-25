@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.UUID;
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -21,7 +19,6 @@ public class Avaliacao {
 	public static Avaliacao criar(Long consultaId, int nota, String comentario) {
 
 		var avaliacao = new Avaliacao();
-		avaliacao.setId(Long.parseLong(UUID.randomUUID().toString()));
 		avaliacao.setConsultaId(consultaId);
 		avaliacao.setNota(nota);
 		avaliacao.setComentario(comentario);
