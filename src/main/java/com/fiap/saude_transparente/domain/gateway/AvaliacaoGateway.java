@@ -12,7 +12,7 @@ public interface AvaliacaoGateway {
 	List<Avaliacao> getAllAvaliacoesByMedicoId(Long medicoId, int size, int offset);
 	BigDecimal getMediaNotaByMedicoId(Long medicoId);
 	int getQuantidadeAvaliacoesByMedicoId(Long medicoId);
-	Avaliacao criarAvaliacao(Avaliacao avaliacao);
+	Long criarAvaliacao(Avaliacao avaliacao);
 	Avaliacao atualizarAvaliacao(Avaliacao avaliacao);
 	void deletarAvaliacao(Long id);
 }
