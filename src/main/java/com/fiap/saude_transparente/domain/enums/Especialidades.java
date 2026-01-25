@@ -1,0 +1,5 @@
+package com.fiap.saude_transparente.domain.enums;
+
+public enum Especialidades {
+	GERAL,ORTOPEDIA,CARDIOLOGIA,DERMATOLOGIA,NEUROLOGIA,PEDIATRIA, GINECOLOGIA,ENDOCRINOLOGIA,PSIQUIATRIA,ONCOLOGIA
+}
