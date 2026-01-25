@@ -1,0 +1,51 @@
+services:
+  # Banco de dados MySQL
+  mysql_saude_app:
+    image: mysql:8.4.0
+    container_name: mysql_saude_app
+    environment:
+      MYSQL_DATABASE: appdb
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: apppassword
+      MYSQL_TCP_PORT: 3306
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+    restart: always
+
+  app:
+    build: .
+    container_name: saude-transparente-app
+    ports:
+      - "8081:8083"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql_saude_app:3306/appdb?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_URL_FLYWAY: jdbc:mysql://mysql_saude_app:3306/appdb
+      SPRING_DATASOURCE_USERNAME: appuser
+      SPRING_DATASOURCE_PASSWORD: apppassword
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: guest
+      SPRING_RABBITMQ_PASSWORD: guest
+    networks:
+      - app-network
+    depends_on:
+      mysql_saude_app:
+        condition: service_healthy
+
+volumes:
+  mysql_data:
+  rabbitmq_data:
+
+networks:
+  app-network:
+    driver: bridge

@@ -1,3 +1,32 @@
 spring:
   application:
     name: Saude transparente
+  datasource:
+    url: jdbc:mysql://localhost:3307/appdb?useSSL=false&allowPublicKeyRetrieval=true
+    username: appuser
+    password: apppassword
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  jpa:
+    show_sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        ddl-auto: none
+
+springdoc:
+  default-produces-media-type: application/json
+  swagger-ui:
+    display-request-duration: true
+    doc-expansion: none
+    groups-order: DESC
+    operationsSorter: alpha
+    tagsSorter: alpha
+    disable-swagger-default-url: true
+    path: /swagger-ui
+    title: FIAP - Saude Transparente API Documentation
+
+server:
+  port: 8083
