@@ -32,10 +32,7 @@ services:
       SPRING_DATASOURCE_URL_FLYWAY: jdbc:mysql://mysql_saude_app:3306/appdb
       SPRING_DATASOURCE_USERNAME: appuser
       SPRING_DATASOURCE_PASSWORD: apppassword
-      SPRING_RABBITMQ_HOST: rabbitmq
-      SPRING_RABBITMQ_PORT: 5672
-      SPRING_RABBITMQ_USERNAME: guest
-      SPRING_RABBITMQ_PASSWORD: guest
+
     networks:
       - app-network
     depends_on:
@@ -44,7 +41,6 @@ services:
 
 volumes:
   mysql_data:
-  rabbitmq_data:
 
 networks:
   app-network:

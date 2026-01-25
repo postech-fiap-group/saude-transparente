@@ -9,6 +9,10 @@ spring:
   flyway:
     enabled: true
     locations: classpath:db/migration
+    repair-on-migrate: true          # IMPORTANTE: Corrige o schema automaticamente
+    baseline-on-migrate: true        # Cria baseline se não existir
+    validate-on-migrate: false       # Desativa validação temporariamente
+    clean-on-validation-error: true  # Limpa em caso de erro (DEV apenas)
   jpa:
     show_sql: true
     properties:
