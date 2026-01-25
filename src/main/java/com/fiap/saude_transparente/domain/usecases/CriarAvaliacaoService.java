@@ -17,10 +17,9 @@ public class CriarAvaliacaoService {
 	public void save(CriarAvaliacaoCommand cmd){
 		var incluirAvaliacao = Avaliacao.criar(cmd.consultaId(), cmd.nota(), cmd.comentario());
 
-		var save = this.avaliacaoGateway.criarAvaliacao(incluirAvaliacao);
+		var id = this.avaliacaoGateway.criarAvaliacao(incluirAvaliacao);
 
-
-		if (save != 1) {
+		if (id == null || id <= 0) {
 			throw new RuntimeException("Erro ao salvar usuário");
 		}
 	}
