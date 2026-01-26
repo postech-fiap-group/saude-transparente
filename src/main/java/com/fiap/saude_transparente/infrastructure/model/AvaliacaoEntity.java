@@ -4,11 +4,13 @@ import com.fiap.saude_transparente.domain.entities.Avaliacao;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @Table(name="avaliacao")
 @AllArgsConstructor
+@NoArgsConstructor
 public class AvaliacaoEntity {
 
 	@Id

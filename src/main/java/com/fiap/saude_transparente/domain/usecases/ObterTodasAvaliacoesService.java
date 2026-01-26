@@ -5,14 +5,17 @@ import com.fiap.saude_transparente.domain.gateway.AvaliacaoGateway;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
-public class ObterAvaliacaoPorId {
+public class ObterTodasAvaliacoesService {
 
 	private final AvaliacaoGateway avaliacaoGateway;
 
-	public Avaliacao getById(Long id){
+	public List<Avaliacao> getAll(int page, int size){
+		int offset = (page-1) * size;
 
-		return this.avaliacaoGateway.getBydId(id);
+		return this.avaliacaoGateway.getAll(size,offset);
 	}
 }

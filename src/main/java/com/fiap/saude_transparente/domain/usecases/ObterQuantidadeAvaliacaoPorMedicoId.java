@@ -1,4 +1,4 @@
 package com.fiap.saude_transparente.domain.usecases;
 
-public class DeletarAvaliacaoService {
+public class ObterQuantidadeAvaliacaoPorMedicoId {
 }
