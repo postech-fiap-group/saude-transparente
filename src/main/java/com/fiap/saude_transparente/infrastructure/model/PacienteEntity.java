@@ -4,6 +4,7 @@ import com.fiap.saude_transparente.domain.entities.Paciente;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
@@ -11,13 +12,14 @@ import java.time.LocalDate;
 @Entity
 @Table(name="paciente")
 @AllArgsConstructor
+@NoArgsConstructor
 public class PacienteEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String nome;
-	private String sobreNome;
+	private String sobrenome;
 	private String telefone;
 	private String email;
 	private String cpf;
@@ -27,7 +29,7 @@ public class PacienteEntity {
 	public PacienteEntity(Paciente paciente){
 		this.id = paciente.getId();
 		this.nome = paciente.getNome();
-		this.sobreNome = paciente.getSobreNome();
+		this.sobrenome = paciente.getSobrenome();
 		this.telefone = paciente.getTelefone();
 		this.email = paciente.getEmail();
 		this.cpf = paciente.getCpf();
@@ -38,7 +40,7 @@ public class PacienteEntity {
 	public Paciente toDomain(){
 		var paciente = Paciente.criar(
 				this.nome,
-				this.sobreNome,
+				this.sobrenome,
 				this.telefone,
 				this.email,
 				this.cpf,

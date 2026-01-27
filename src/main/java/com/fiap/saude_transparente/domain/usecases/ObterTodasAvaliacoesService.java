@@ -13,9 +13,12 @@ public class ObterTodasAvaliacoesService {
 
 	private final AvaliacaoGateway avaliacaoGateway;
 
-	public List<Avaliacao> getAll(int page, int size){
+	public List<Avaliacao> execute(int page, int size){
 		int offset = (page-1) * size;
 
 		return this.avaliacaoGateway.getAll(size,offset);
 	}
+
+
+
 }

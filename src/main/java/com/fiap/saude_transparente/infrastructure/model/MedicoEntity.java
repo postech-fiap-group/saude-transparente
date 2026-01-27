@@ -6,6 +6,7 @@ import com.fiap.saude_transparente.domain.enums.Especialidades;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
@@ -13,13 +14,16 @@ import java.time.LocalDate;
 @Entity
 @Table(name="medico")
 @AllArgsConstructor
+@NoArgsConstructor
 public class MedicoEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String nome;
-	private String sobreNome;
+	private String sobrenome;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "especialidade")
 	private Especialidades especialidade;
 	private String crm;
 	private String telefone;
@@ -31,7 +35,7 @@ public class MedicoEntity {
 	public MedicoEntity(Medico medico){
 		this.id = medico.getId();
 		this.nome = medico.getNome();
-		this.sobreNome = medico.getSobreNome();
+		this.sobrenome = medico.getSobrenome();
 		this.especialidade = medico.getEspecialidade();
 		this.crm = medico.getCrm();
 		this.telefone = medico.getTelefone();
@@ -44,7 +48,7 @@ public class MedicoEntity {
 	public Medico toDomain(){
 		var medico = Medico.criar(
 				this.nome,
-				this.sobreNome,
+				this.sobrenome,
 				this.especialidade,
 				this.crm,
 				this.telefone,

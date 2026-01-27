@@ -11,7 +11,7 @@ public class ObterAvaliacaoPorId {
 
 	private final AvaliacaoGateway avaliacaoGateway;
 
-	public Avaliacao getById(Long id){
+	public Avaliacao execute(Long id){
 
 		return this.avaliacaoGateway.getBydId(id);
 	}
