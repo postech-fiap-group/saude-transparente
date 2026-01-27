@@ -10,8 +10,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
-import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Repository
@@ -29,14 +29,6 @@ public class AvaliacaoRepository implements AvaliacaoGateway {
 		return pageResult.getContent().stream().map(AvaliacaoEntity::toDomain).toList();
 	}
 
-	private Avaliacao convertToAvaliacao(AvaliacaoEntity entity) {
-		Avaliacao avaliacao = new Avaliacao();
-		avaliacao.setId(entity.getId());
-		avaliacao.setConsultaId(entity.getConsultaId());
-		avaliacao.setNota(entity.getNota());
-		avaliacao.setComentario(entity.getComentario());
-		return avaliacao;
-	}
 
 	@Override
 	public Avaliacao getBydId(Long id) {
@@ -46,19 +38,55 @@ public class AvaliacaoRepository implements AvaliacaoGateway {
 	}
 
 	@Override
-	public List<Avaliacao> getAllAvaliacoesByMedicoId(Long medicoId, int size, int offset) {
-		return List.of();
-	}
+	public Map<String, Object> getEstatisticasAvaliacoesByMedicoId(Long medicoId) {
 
-	@Override
-	public BigDecimal getMediaNotaByMedicoId(Long medicoId) {
-		
-		return null;
+		String sql = """
+        SELECT 
+            m.id AS medico_id,
+            m.nome AS medico_nome,
+            m.especialidade,
+            COALESCE(AVG(a.nota), 0) AS media_notas,
+            COUNT(a.id) AS total_avaliacoes,
+            MIN(a.nota) AS nota_minima,
+            MAX(a.nota) AS nota_maxima
+        FROM medico m
+        LEFT JOIN consulta c ON m.id = c.medico_id
+        LEFT JOIN avaliacao a ON c.id = a.consulta_id
+        WHERE m.id = ?
+        GROUP BY m.id, m.nome, m.especialidade
+        """;
+		try{
+		return jdbcClient.sql(sql)
+				.param(medicoId)
+				.query(Map.class)
+				.single();
+		} catch (Exception e) {
+			return buscarApenasMedico(medicoId);
+		}
 	}
+	private Map<String, Object> buscarApenasMedico(Long medicoId) {
+		String sql = """
+        SELECT 
+            m.id AS medico_id,
+            m.nome AS medico_nome,
+            m.especialidade,
+            0 AS media_notas,
+            0 AS total_avaliacoes,
+            0 AS nota_minima,
+            0 AS nota_maxima
+        FROM medico m
+        WHERE m.id = ?
+        """;
 
-	@Override
-	public int getQuantidadeAvaliacoesByMedicoId(Long medicoId) {
-		return 0;
+		try {
+			return jdbcClient.sql(sql)
+					.param(medicoId)
+					.query(Map.class)
+					.list().getFirst();
+		} catch (Exception e) {
+			// Médico não encontrado
+			return null;
+		}
 	}
 
 	@Override

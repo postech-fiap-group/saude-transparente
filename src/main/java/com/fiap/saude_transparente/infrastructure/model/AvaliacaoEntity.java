@@ -16,7 +16,14 @@ public class AvaliacaoEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@ManyToOne
+	@JoinColumn(name = "consulta_id", referencedColumnName = "id")
+	private ConsultaEntity consulta;
+
+	@Column(name="consulta_id", insertable = false, updatable = false)
 	private Long consultaId;
+
 	private int nota;
 	private String comentario;
 

@@ -1,13 +1,12 @@
 package com.fiap.saude_transparente.application.controller;
 
 import com.fiap.saude_transparente.application.controller.dtos.CriarAvaliacaoDTO;
+import com.fiap.saude_transparente.application.presenter.AvaliacaoPresenter;
+import com.fiap.saude_transparente.application.presenter.NotaResponse;
 import com.fiap.saude_transparente.domain.commands.AlterarAvaliacaoCommand;
 import com.fiap.saude_transparente.domain.commands.CriarAvaliacaoCommand;
 import com.fiap.saude_transparente.domain.entities.Avaliacao;
-import com.fiap.saude_transparente.domain.usecases.AlterarAvaliacaoService;
-import com.fiap.saude_transparente.domain.usecases.CriarAvaliacaoService;
-import com.fiap.saude_transparente.domain.usecases.ObterAvaliacaoPorId;
-import com.fiap.saude_transparente.domain.usecases.ObterTodasAvaliacoesService;
+import com.fiap.saude_transparente.domain.usecases.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -29,7 +28,9 @@ public class AvaliacaoController {
 	private final CriarAvaliacaoService criarAvaliacaoService;
 	private final AlterarAvaliacaoService alterarAvaliacaoService;
 	private final ObterTodasAvaliacoesService obterTodasAvaliacoesService;
+	private final ObterEstatisticaAvaliacaoPorMedicoId obterEstatisticaAvaliacaoPorMedicoId;
 	private final ObterAvaliacaoPorId obterAvaliacaoPorId;
+	private final AvaliacaoPresenter avaliacaoPresenter;
 	private final Validator validator;
 
 	@PostMapping
@@ -68,12 +69,20 @@ public class AvaliacaoController {
 			@RequestParam(value = "page", defaultValue = "1") int page,
 			@RequestParam(value = "size", defaultValue = "10") int size) {
 
-		return ResponseEntity.ok(this.obterTodasAvaliacoesService.getAll(page, size));
+		return ResponseEntity.ok(this.obterTodasAvaliacoesService.execute(page, size));
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<Avaliacao> getById(
 			@PathVariable("id") Long id) {
-		return ResponseEntity.ok(this.obterAvaliacaoPorId.getById(id));
+		return ResponseEntity.ok(this.obterAvaliacaoPorId.execute(id));
+	}
+
+	@GetMapping("/medico/{medicoId}")
+	public ResponseEntity<NotaResponse> getAvaliacaoPorMedicoId(
+			@PathVariable("medicoId") Long medicoId) {
+
+		return ResponseEntity.ok(avaliacaoPresenter.presenter(this.obterEstatisticaAvaliacaoPorMedicoId.execute(medicoId)));
+
 	}
 }

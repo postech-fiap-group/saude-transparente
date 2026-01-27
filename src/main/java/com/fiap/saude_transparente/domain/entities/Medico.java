@@ -16,7 +16,7 @@ public class Medico {
 
 	private Long id;
 	private String nome;
-	private String sobreNome;
+	private String sobrenome;
 	private Especialidades especialidade;
 	private String crm;
 	private String telefone;
@@ -29,7 +29,7 @@ public class Medico {
 
 		var medico = new Medico();
 		medico.setNome(nome);
-		medico.setSobreNome(sobreNome);
+		medico.setSobrenome(sobreNome);
 		medico.setEspecialidade(especialidade);
 		medico.setCrm(crm);
 		medico.setTelefone(telefone);
@@ -46,7 +46,7 @@ public class Medico {
 		var medico = new Medico();
 		medico.setId(id);
 		medico.setNome(nome);
-		medico.setSobreNome(sobreNome);
+		medico.setSobrenome(sobreNome);
 		medico.setEspecialidade(especialidade);
 		medico.setCrm(crm);
 		medico.setTelefone(telefone);

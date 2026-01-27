@@ -15,18 +15,18 @@ public class Paciente {
 
 	private Long id;
 	private String nome;
-	private String sobreNome;
+	private String sobrenome;
 	private String telefone;
 	private String email;
 	private String cpf;
 	private String endereco;
 	private LocalDate dataNascimento;
 
-	public static Paciente criar(String nome, String sobreNome, String telefone, String email, String cpf,String endereco,LocalDate dataNascimento) {
+	public static Paciente criar(String nome, String sobrenome, String telefone, String email, String cpf,String endereco,LocalDate dataNascimento) {
 
 		var paciente = new Paciente();
 		paciente.setNome(nome);
-		paciente.setSobreNome(sobreNome);
+		paciente.setSobrenome(sobrenome);
 		paciente.setTelefone(telefone);
 		paciente.setEmail(email);
 		paciente.setCpf(cpf);
@@ -37,12 +37,12 @@ public class Paciente {
 
 	}
 
-	public static Paciente alterar(Long id, String nome, String sobreNome, String telefone, String email, String cpf,String endereco, LocalDate dataNascimento) {
+	public static Paciente alterar(Long id, String nome, String sobrenome, String telefone, String email, String cpf,String endereco, LocalDate dataNascimento) {
 
 		var paciente = new Paciente();
 		paciente.setId(id);
 		paciente.setNome(nome);
-		paciente.setSobreNome(sobreNome);
+		paciente.setSobrenome(sobrenome);
 		paciente.setTelefone(telefone);
 		paciente.setEmail(email);
 		paciente.setCpf(cpf);

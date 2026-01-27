@@ -19,6 +19,11 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
         ddl-auto: none
+        format: true
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
 
 springdoc:
   default-produces-media-type: application/json
