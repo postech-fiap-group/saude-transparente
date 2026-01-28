@@ -18,7 +18,6 @@ public class ConsultaEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
 	@ManyToOne
 	@JoinColumn(name = "paciente_id", referencedColumnName = "id")
 	private PacienteEntity paciente;

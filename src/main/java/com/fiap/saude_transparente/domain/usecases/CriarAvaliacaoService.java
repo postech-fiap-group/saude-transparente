@@ -20,7 +20,7 @@ public class CriarAvaliacaoService {
 		var id = this.avaliacaoGateway.criarAvaliacao(incluirAvaliacao);
 
 		if (id == null || id <= 0) {
-			throw new RuntimeException("Erro ao salvar usuário");
+			throw new RuntimeException("Erro ao salvar a avaliação");
 		}
 	}
 }
