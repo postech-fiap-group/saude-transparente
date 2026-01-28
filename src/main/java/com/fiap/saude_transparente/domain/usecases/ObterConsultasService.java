@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ObterConsultas {
+public class ObterConsultasService {
 
     private final ConsultaGateway consultaGateway;
 

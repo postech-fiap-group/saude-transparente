@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface ConsultaGateway {
 
-	Consulta getConsultaById(Long id);
 	List<Consulta> getAllConsultas(int size, int offset);
-	Consulta criarConsulta(Consulta consulta);
-	Consulta atualizarConsulta(Consulta consulta);
+	Consulta getConsultaById(Long id);
+	Long criarConsulta(Consulta consulta);
+	Long alterarConsulta(Consulta consulta);
 	void deletarConsulta(Long id);
 }

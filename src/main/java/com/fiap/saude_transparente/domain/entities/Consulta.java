@@ -23,7 +23,6 @@ public class Consulta {
 	public static Consulta criar(Long pacienteId, Long medicoId, LocalDateTime dataConsulta, String motivo) {
 
 		var consulta = new Consulta();
-		consulta.setId(Long.parseLong(UUID.randomUUID().toString()));
 		consulta.setPacienteId(pacienteId);
 		consulta.setMedicoId(medicoId);
 		consulta.setDataConsulta(dataConsulta);

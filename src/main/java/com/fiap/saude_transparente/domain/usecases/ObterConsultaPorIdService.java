@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ObterConsultaPorId {
+public class ObterConsultaPorIdService {
 
     private final ConsultaGateway consultaGateway;
 
