@@ -49,14 +49,14 @@ public class AvaliacaoController {
 	@PutMapping("/{id}")
 	public ResponseEntity<Void> alterar(
 			@PathVariable("id") Long id,
-			@RequestBody CriarAvaliacaoDTO cardapioDTO) {
+			@RequestBody CriarAvaliacaoDTO criarAvaliacaoDTO) {
 
-		var erros = this.validator.validateObject(cardapioDTO)
+		var erros = this.validator.validateObject(criarAvaliacaoDTO)
 				.getAllErrors()
 				.stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toSet());
 
-		var cmd = new AlterarAvaliacaoCommand(id, cardapioDTO.consultaId(),
-				cardapioDTO.nota(), cardapioDTO.comentario());
+		var cmd = new AlterarAvaliacaoCommand(id, criarAvaliacaoDTO.consultaId(),
+				criarAvaliacaoDTO.nota(), criarAvaliacaoDTO.comentario());
 
 		this.alterarAvaliacaoService.save(cmd);
 

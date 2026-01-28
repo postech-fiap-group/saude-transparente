@@ -1,16 +1,15 @@
 package com.fiap.saude_transparente.domain.usecases;
 
-import com.fiap.saude_transparente.application.controller.MedicoController;
-import com.fiap.saude_transparente.domain.commands.CriarMedicoCommand;
 import com.fiap.saude_transparente.domain.entities.Medico;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 @Service
 @Transactional
-public class CriarMedicoService {
+public class ObterMedicoPorIdService {
 
-    public Medico criar(CriarMedicoCommand cmd) {
+
+    public Medico findById(Long id) {
         return null;
     }
 }
