@@ -6,10 +6,13 @@ import java.util.List;
 
 public interface PacienteGateway {
 
-	Paciente getPacienteById(Long id);
 	List<Paciente> getAllPacientes(int size, int offset);
-	Paciente criarPaciente(Paciente paciente);
-	Paciente atualizarPaciente(Paciente paciente);
-	void deletarPaciente(Long id);
 
+	Paciente getPacienteById(Long id);
+
+	Long criarPaciente(Paciente paciente);
+
+	Long alterarPaciente(Paciente paciente);
+
+	void deletarPaciente(Long id);
 }

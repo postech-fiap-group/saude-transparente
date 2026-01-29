@@ -1,31 +1,108 @@
 package com.fiap.saude_transparente.application.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import com.fiap.saude_transparente.application.controller.dtos.CriarPacienteDTO;
+import com.fiap.saude_transparente.domain.commands.AlterarPacienteCommand;
+import com.fiap.saude_transparente.domain.commands.CriarPacienteCommand;
+import com.fiap.saude_transparente.domain.entities.Paciente;
+import com.fiap.saude_transparente.domain.usecases.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.Validator;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/pacientes")
 @AllArgsConstructor
-@Tag(name = "Pacientes", description = "Cadastro de pacientes")
+@Tag(name = "Pacientes", description = "Pacientes do sistema")
 public class PacienteController {
 
-	@Operation(summary = "Listar todos os pacientes")
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Lista de pacientes retornada"),
-			@ApiResponse(responseCode = "500", description = "Erro interno do servidor")
-	})
+	private final CriarPacienteService criarPacienteService;
+	private final AlterarPacienteService alterarPacienteService;
+	private final ObterPacientesService obterPacientesService;
+	private final ObterPacientePorIdService obterPacientePorIdService;
+	private final DeletarPacienteService deletarPacienteService;
+	private Validator validator;
+
+	@PostMapping
+	public ResponseEntity<Void> criar(@RequestBody @Valid CriarPacienteDTO dto) {
+
+		var erros = this.validator.validateObject(dto)
+				.getAllErrors()
+				.stream()
+				.map(DefaultMessageSourceResolvable::getDefaultMessage)
+				.collect(Collectors.toSet());
+
+		this.criarPacienteService.save(new CriarPacienteCommand(
+				dto.nome(),
+				dto.sobreNome(),
+				dto.telefone(),
+				dto.email(),
+				dto.cpf(),
+				dto.endereco(),
+				dto.dataNascimento()
+		));
+
+		return ResponseEntity.status(HttpStatus.OK).build();
+	}
+
+	@PutMapping("/{id}")
+	public ResponseEntity<Void> alterar(
+			@PathVariable("id") Long id,
+			@RequestBody @Valid CriarPacienteDTO dto) {
+
+		var erros = this.validator.validateObject(dto)
+				.getAllErrors()
+				.stream()
+				.map(DefaultMessageSourceResolvable::getDefaultMessage)
+				.collect(Collectors.toSet());
+
+		var cmd = new AlterarPacienteCommand(
+				id,
+				dto.nome(),
+				dto.sobreNome(),
+				dto.telefone(),
+				dto.email(),
+				dto.cpf(),
+				dto.endereco(),
+				dto.dataNascimento()
+		);
+
+		this.alterarPacienteService.save(cmd);
+
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+	}
+
 	@GetMapping
-	public ResponseEntity<List<String>> listarPacientes() {
-		// Exemplo - implementar com repositório
-		return ResponseEntity.ok(List.of("Paciente 1", "Paciente 2"));
+	public ResponseEntity<List<Paciente>> getAll(
+			@RequestParam(value = "page", defaultValue = "1") int page,
+			@RequestParam(value = "size", defaultValue = "10") int size) {
+
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body(this.obterPacientesService.execute(page, size));
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<Paciente> getById(
+			@PathVariable("id") Long id) {
+
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body(this.obterPacientePorIdService.execute(id));
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> delete(
+			@PathVariable("id") Long id) {
+
+		this.deletarPacienteService.execute(id);
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 }

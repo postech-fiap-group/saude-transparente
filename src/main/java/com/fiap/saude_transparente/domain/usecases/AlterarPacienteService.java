@@ -1,6 +1,6 @@
 package com.fiap.saude_transparente.domain.usecases;
 
-import com.fiap.saude_transparente.domain.commands.CriarPacienteCommand;
+import com.fiap.saude_transparente.domain.commands.AlterarPacienteCommand;
 import com.fiap.saude_transparente.domain.entities.Paciente;
 import com.fiap.saude_transparente.domain.gateway.PacienteGateway;
 import jakarta.transaction.Transactional;
@@ -10,14 +10,15 @@ import org.springframework.stereotype.Service;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class CriarPacienteService {
+public class AlterarPacienteService {
 
     private final PacienteGateway pacienteGateway;
 
-    public void save(CriarPacienteCommand cmd) {
+    public void save(AlterarPacienteCommand cmd) {
 
-        var id = this.pacienteGateway.criarPaciente(
-                Paciente.criar(
+        var id = this.pacienteGateway.alterarPaciente(
+                Paciente.alterar(
+                        cmd.id(),
                         cmd.nome(),
                         cmd.sobrenome(),
                         cmd.telefone(),
@@ -29,7 +30,7 @@ public class CriarPacienteService {
         );
 
         if (id == null || id <= 0) {
-            throw new RuntimeException("Erro ao criar o paciente");
+            throw new RuntimeException("Erro ao alterar o paciente");
         }
     }
 }

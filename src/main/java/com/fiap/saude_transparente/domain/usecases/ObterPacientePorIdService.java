@@ -1,18 +1,17 @@
 package com.fiap.saude_transparente.domain.usecases;
 
+import com.fiap.saude_transparente.domain.entities.Paciente;
 import com.fiap.saude_transparente.domain.gateway.PacienteGateway;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
-public class DeletarPacienteService {
+public class ObterPacientePorIdService {
 
     private final PacienteGateway pacienteGateway;
 
-    public void execute(Long id) {
-        this.pacienteGateway.deletarPaciente(id);
+    public Paciente execute(Long id) {
+        return this.pacienteGateway.getPacienteById(id);
     }
 }
