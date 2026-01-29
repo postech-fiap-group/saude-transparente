@@ -64,7 +64,7 @@ public class MedicoController {
     @Operation(summary = "Buscar médico por id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Médicos retornado com sucesso"),
-            @ApiResponse(responseCode = "402", description = "Médico não encontrado"),
+            @ApiResponse(responseCode = "404", description = "Médico não encontrado"),
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
     @GetMapping("/{id}")
@@ -104,7 +104,7 @@ public class MedicoController {
     @Operation(summary = "atualizar cadastro de médico")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Médicos atualizado com sucesso"),
-            @ApiResponse(responseCode = "402", description = "Médico não encontrado"),
+            @ApiResponse(responseCode = "404", description = "Médico não encontrado"),
             @ApiResponse(responseCode = "400", description = "Campos inválidos"),
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
@@ -137,7 +137,7 @@ public class MedicoController {
     @Operation(summary = "deletar cadastro de médico")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Médicos deletado com sucesso"),
-            @ApiResponse(responseCode = "402", description = "Médico não encontrado"),
+            @ApiResponse(responseCode = "404", description = "Médico não encontrado"),
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
     @DeleteMapping("/{id}")

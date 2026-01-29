@@ -15,17 +15,20 @@ public class AlterarMedicoService {
 
     private final MedicoGateway medicoGateway;
 
-    public void update(AlterarMedicoCommand cmd){
+    public void update(AlterarMedicoCommand medicoCommand) {
 
-        var id = this.medicoGateway.atualizarMedico(Medico.alterar(
-                cmd.id(),
-                cmd.consultaId(),
-                cmd.nota(),
-                cmd.comentario()));
+        var medico = Medico.alterar(medicoCommand.id(),
+                medicoCommand.nome(),
+                medicoCommand.sobrenome(),
+                medicoCommand.especialidade(),
+                medicoCommand.cpf(),
+                medicoCommand.crm(),
+                medicoCommand.endereco(),
+                medicoCommand.telefone(),
+                medicoCommand.email(),
+                medicoCommand.dataNascimento());
+        this.medicoGateway.atualizarMedico(medico);
 
-        if (id == null || id <= 0) {
-            throw new RuntimeException("Erro ao alterar médico");
-        }
     }
 
 }

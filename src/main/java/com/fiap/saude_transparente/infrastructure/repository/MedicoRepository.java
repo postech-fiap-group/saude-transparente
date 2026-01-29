@@ -15,55 +15,63 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Repository
 public class MedicoRepository implements MedicoGateway {
 
-	private final MedicoJpaRepository medicoJpaRepository;
-	private final JdbcClient jdbcClient;
+    private final MedicoJpaRepository medicoJpaRepository;
+    private final JdbcClient jdbcClient;
 
-	@Override
-	public List<Medico> getAllMedicos(int size, int offset) {
+    @Override
+    public List<Medico> getAllMedicos(int size, int offset) {
 
-		Pageable pageable = PageRequest.of(0, size).withPage(offset / size);
-		Page<MedicoEntity> pageResult = medicoJpaRepository.findAll(pageable);
+        Pageable pageable = PageRequest.of(0, size).withPage(offset / size);
+        Page<MedicoEntity> pageResult = medicoJpaRepository.findAll(pageable);
 
-		return pageResult.getContent().stream().map(MedicoEntity::toDomain).toList();
-	}
+        return pageResult.getContent().stream().map(MedicoEntity::toDomain).toList();
+    }
 
 
-	@Override
-	public Medico getMedicoById(Long id) {
-		return this.medicoJpaRepository.findById(id)
-				.map(MedicoEntity::toDomain)
-				.orElseThrow(() -> new MedicoNaoEncontradoException("Médico não encontrada com ID: " + id));
-	}
+    @Override
+    public Medico getMedicoById(Long id) throws MedicoNaoEncontradoException {
+        return this.medicoJpaRepository.findById(id)
+                .map(MedicoEntity::toDomain)
+                .orElseThrow(() -> new MedicoNaoEncontradoException("Médico não encontrada com ID: " + id));
+    }
 
-	@Override
-	public Medico criarMedico(Medico medico) {
+    @Override
+    public Medico criarMedico(Medico medico) {
+        MedicoEntity medicoEntity = medicoJpaRepository.save(new MedicoEntity(medico));
+        return medicoEntity.toDomain();
+    }
 
-		var newEntity = this.medicoJpaRepository.save(new MedicoEntity(medico));
+    @Override
+    public void atualizarMedico(Medico medico) {
 
-		return newEntity.getId();
-	}
+        medicoJpaRepository.findById(medico.getId()).map(medicoEntity -> {
+            medicoEntity.setNome(medico.getNome());
+            medicoEntity.setSobrenome(medico.getSobrenome());
+            medicoEntity.setCpf(medico.getCpf());
+            medicoEntity.setCrm(medico.getCrm());
+            medicoEntity.setEspecialidade(medico.getEspecialidade());
+            medicoEntity.setEmail(medico.getEmail());
+            medicoEntity.setEndereco(medico.getEndereco());
+            medicoEntity.setTelefone(medico.getTelefone());
+            medicoEntity.setDataNascimento(medico.getDataNascimento());
+            return medicoJpaRepository.save(medicoEntity);
+        }).orElseThrow(() -> new MedicoNaoEncontradoException("Medico não encontrada com ID: " + medico.getId()));
+    }
 
-	@Override
-	public Medico atualizarMedico(Medico medico) {
+    @Override
+    public void deletarMedico(Long id) {
 
-		 medicoJpaRepository.findById(medico.getId()).map(medicoEntity -> {
-			medicoEntity.setConsultaId(avaliacao.getConsultaId());
-			medicoEntity.setNota(avaliacao.getNota());
-			medicoEntity.setComentario(avaliacao.getComentario());
-			return medicoJpaRepository.save(medicoEntity);
-		}).orElseThrow(() -> new MedicoNaoEncontradoException("Medico não encontrada com ID: " + medico.getId()));
+        if (!medicoJpaRepository.existsById(id))  {
+        throw new MedicoNaoEncontradoException("Medico não encontrada com ID: " + id);
+        }
+        medicoJpaRepository.deleteById(id);
 
-		return entidadeAtualizada.getId();
-	}
-
-	@Override
-	public void deletarMedico(Long id) {
-
-	}
+    }
 
 }
