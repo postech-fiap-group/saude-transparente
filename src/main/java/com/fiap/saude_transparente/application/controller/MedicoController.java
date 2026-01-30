@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
-import lombok.extern.log4j.Log4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +23,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/medico")
 @Tag(name = "Medico", description = "Cadastro de médicos")
-@Log4j
+@AllArgsConstructor
 public class MedicoController {
 
     private final CriarMedicoService criarMedicoService;
@@ -34,19 +33,6 @@ public class MedicoController {
     private final ObterMedicoPorIdService obterMedicoPorIdService;
     private final Validator validator;
 
-    public MedicoController(CriarMedicoService criarMedicoService,
-                            AlterarMedicoService alterarMedicoService,
-                            DeletarMedicoService deletarMedicoService,
-                            ObterMedicosService obterMedicosService,
-                            ObterMedicoPorIdService obterMedicoPorIdService,
-                            Validator validator) {
-        this.criarMedicoService = criarMedicoService;
-        this.alterarMedicoService = alterarMedicoService;
-        this.deletarMedicoService = deletarMedicoService;
-        this.obterMedicosService = obterMedicosService;
-        this.obterMedicoPorIdService = obterMedicoPorIdService;
-        this.validator = validator;
-    }
 
     @Operation(summary = "Listar todos médicos")
     @ApiResponses(value = {
