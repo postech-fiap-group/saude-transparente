@@ -6,6 +6,7 @@ import com.fiap.saude_transparente.application.presenter.NotaResponse;
 import com.fiap.saude_transparente.domain.commands.AlterarAvaliacaoCommand;
 import com.fiap.saude_transparente.domain.commands.CriarAvaliacaoCommand;
 import com.fiap.saude_transparente.domain.entities.Avaliacao;
+import com.fiap.saude_transparente.domain.exceptions.InvalidFieldsException;
 import com.fiap.saude_transparente.domain.usecases.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -37,9 +38,12 @@ public class AvaliacaoController {
     public ResponseEntity<Void> avaliar(
             @RequestBody @Valid CriarAvaliacaoDTO avaliacaoDTO) {
 
-        this.validator.validateObject(avaliacaoDTO)
+        var erros = this.validator.validateObject(avaliacaoDTO)
                 .getAllErrors()
                 .stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toSet());
+
+        if (!erros.isEmpty())
+            throw new InvalidFieldsException(erros);
 
         this.criarAvaliacaoService.save(new CriarAvaliacaoCommand(avaliacaoDTO.consultaId()
                 , avaliacaoDTO.nota(), avaliacaoDTO.comentario()));
@@ -51,9 +55,12 @@ public class AvaliacaoController {
             @PathVariable("id") Long id,
             @RequestBody CriarAvaliacaoDTO cardapioDTO) {
 
-        this.validator.validateObject(cardapioDTO)
+        var erros = this.validator.validateObject(cardapioDTO)
                 .getAllErrors()
                 .stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toSet());
+
+        if (!erros.isEmpty())
+            throw new InvalidFieldsException(erros);
 
         var cmd = new AlterarAvaliacaoCommand(id, cardapioDTO.consultaId(),
                 cardapioDTO.nota(), cardapioDTO.comentario());
