@@ -1,23 +1,21 @@
 package com.fiap.saude_transparente.application.controller;
 
 import com.fiap.saude_transparente.application.controller.dtos.CriarAvaliacaoDTO;
-import com.fiap.saude_transparente.application.presenter.AvaliacaoPresenter;
-import com.fiap.saude_transparente.application.presenter.NotaResponse;
 import com.fiap.saude_transparente.domain.commands.AlterarAvaliacaoCommand;
 import com.fiap.saude_transparente.domain.commands.CriarAvaliacaoCommand;
 import com.fiap.saude_transparente.domain.entities.Avaliacao;
-import com.fiap.saude_transparente.domain.usecases.*;
+import com.fiap.saude_transparente.domain.usecases.AlterarAvaliacaoService;
+import com.fiap.saude_transparente.domain.usecases.CriarAvaliacaoService;
+import com.fiap.saude_transparente.domain.usecases.ObterAvaliacaoPorId;
+import com.fiap.saude_transparente.domain.usecases.ObterTodasAvaliacoesService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/avaliacaoes")
@@ -28,18 +26,11 @@ public class AvaliacaoController {
 	private final CriarAvaliacaoService criarAvaliacaoService;
 	private final AlterarAvaliacaoService alterarAvaliacaoService;
 	private final ObterTodasAvaliacoesService obterTodasAvaliacoesService;
-	private final ObterEstatisticaAvaliacaoPorMedicoId obterEstatisticaAvaliacaoPorMedicoId;
 	private final ObterAvaliacaoPorId obterAvaliacaoPorId;
-	private final AvaliacaoPresenter avaliacaoPresenter;
-	private final Validator validator;
 
 	@PostMapping
 	public ResponseEntity<Void> avaliar(
 			@RequestBody @Valid CriarAvaliacaoDTO avaliacaoDTO){
-
-		var erros = this.validator.validateObject(avaliacaoDTO)
-				.getAllErrors()
-				.stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toSet());
 
 		this.criarAvaliacaoService.save(new CriarAvaliacaoCommand(avaliacaoDTO.consultaId()
 				, avaliacaoDTO.nota(), avaliacaoDTO.comentario()));
@@ -51,11 +42,7 @@ public class AvaliacaoController {
 			@PathVariable("id") Long id,
 			@RequestBody CriarAvaliacaoDTO cardapioDTO) {
 
-		var erros = this.validator.validateObject(cardapioDTO)
-				.getAllErrors()
-				.stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toSet());
-
-		var cmd = new AlterarAvaliacaoCommand(id, cardapioDTO.consultaId(),
+			var cmd = new AlterarAvaliacaoCommand(id, cardapioDTO.consultaId(),
 				cardapioDTO.nota(), cardapioDTO.comentario());
 
 		this.alterarAvaliacaoService.save(cmd);
@@ -78,11 +65,4 @@ public class AvaliacaoController {
 		return ResponseEntity.ok(this.obterAvaliacaoPorId.execute(id));
 	}
 
-	@GetMapping("/medico/{medicoId}")
-	public ResponseEntity<NotaResponse> getAvaliacaoPorMedicoId(
-			@PathVariable("medicoId") Long medicoId) {
-
-		return ResponseEntity.ok(avaliacaoPresenter.presenter(this.obterEstatisticaAvaliacaoPorMedicoId.execute(medicoId)));
-
-	}
 }

@@ -7,9 +7,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -42,52 +44,67 @@ public class AvaliacaoRepository implements AvaliacaoGateway {
 
 		String sql = """
         SELECT 
-            m.id AS medico_id,
-            m.nome AS medico_nome,
-            m.especialidade,
-            COALESCE(AVG(a.nota), 0) AS media_notas,
-            COUNT(a.id) AS total_avaliacoes,
-            MIN(a.nota) AS nota_minima,
-            MAX(a.nota) AS nota_maxima
+            m.id AS medicoId,
+            m.nome AS medicoNome,
+            m.especialidade AS especialidade,
+            m.crm AS crm,
+            COALESCE(AVG(a.nota), 0) AS mediaNotas,
+            COALESCE(COUNT(a.id), 0) AS totalAvaliacoes,
+            COALESCE(MIN(a.nota),0) AS notaMinima ,
+            COALESCE(MAX(a.nota),0) AS notaMaxima
         FROM medico m
         LEFT JOIN consulta c ON m.id = c.medico_id
         LEFT JOIN avaliacao a ON c.id = a.consulta_id
         WHERE m.id = ?
         GROUP BY m.id, m.nome, m.especialidade
         """;
-		try{
 		return jdbcClient.sql(sql)
 				.param(medicoId)
-				.query(Map.class)
-				.single();
-		} catch (Exception e) {
-			return buscarApenasMedico(medicoId);
-		}
+				.query(new ColumnMapRowMapper())
+				.optional()
+				.orElseGet(() -> buscarApenasMedico(medicoId));
 	}
+
+	@Override
+	public List<String> getAllComentariosByMedicoId(Long medicoId) {
+		String sql = """
+			SELECT DISTINCT a.comentario AS comentario
+			FROM medico m
+			JOIN consulta c ON m.id = c.medico_id
+			JOIN avaliacao a ON c.id = a.consulta_id
+			WHERE m.id = ?
+			  AND a.comentario IS NOT NULL
+			  AND TRIM(a.comentario) != ''
+        """;
+		return jdbcClient.sql(sql)
+				.param(medicoId)
+				.query((rs, rowNum) -> rs.getString("comentario"))
+				.list();
+	}
+
 	private Map<String, Object> buscarApenasMedico(Long medicoId) {
 		String sql = """
         SELECT 
-            m.id AS medico_id,
-            m.nome AS medico_nome,
-            m.especialidade,
-            0 AS media_notas,
-            0 AS total_avaliacoes,
-            0 AS nota_minima,
-            0 AS nota_maxima
+            m.id AS medicoId,
+            m.nome AS medicoNome,
+            m.especialidade AS especialidade,
+            m.crm AS crm,
+            0 AS mediaNotas,
+            0 AS totalAvaliacoes,
+            0 AS notaMinima,
+            0 AS notaMaxima
         FROM medico m
         WHERE m.id = ?
         """;
 
-		try {
-			return jdbcClient.sql(sql)
-					.param(medicoId)
-					.query(Map.class)
-					.list().getFirst();
-		} catch (Exception e) {
-			// Médico não encontrado
-			return null;
-		}
+		return jdbcClient.sql(sql)
+				.param(medicoId)
+				.query(new ColumnMapRowMapper())
+				.optional()
+				.orElse(Collections.emptyMap());
 	}
+
+
 
 	@Override
 	public Long criarAvaliacao(Avaliacao avaliacao) {

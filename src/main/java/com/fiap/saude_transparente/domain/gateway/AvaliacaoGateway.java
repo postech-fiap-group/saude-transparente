@@ -12,4 +12,5 @@ public interface AvaliacaoGateway {
 	Long criarAvaliacao(Avaliacao avaliacao);
 	Long alterarAvaliacao(Avaliacao avaliacao);
 	Map<String, Object> getEstatisticasAvaliacoesByMedicoId(Long medicoId);
+	List<String> getAllComentariosByMedicoId(Long medicoId);
 }

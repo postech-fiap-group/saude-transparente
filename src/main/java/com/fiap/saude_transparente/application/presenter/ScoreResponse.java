@@ -4,14 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class NotaResponse{
-	private BigDecimal mediaNotas;
-	private int totalAvaliacoes;
-	private BigDecimal notaMaxima;
-	private BigDecimal notaMinima;
+@Getter
+public class ScoreResponse {
+	private Long medicoId;
+	private String medicoNome;
+	private String especialidade;
+	private String crm;
+	private NotaResponse score;
 }

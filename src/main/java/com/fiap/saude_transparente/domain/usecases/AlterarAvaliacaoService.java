@@ -1,7 +1,6 @@
 package com.fiap.saude_transparente.domain.usecases;
 
 import com.fiap.saude_transparente.domain.commands.AlterarAvaliacaoCommand;
-import com.fiap.saude_transparente.domain.commands.CriarAvaliacaoCommand;
 import com.fiap.saude_transparente.domain.entities.Avaliacao;
 import com.fiap.saude_transparente.domain.gateway.AvaliacaoGateway;
 import jakarta.transaction.Transactional;

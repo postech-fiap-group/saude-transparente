@@ -4,17 +4,17 @@ import com.fiap.saude_transparente.domain.gateway.AvaliacaoGateway;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ObterEstatisticaAvaliacaoPorMedicoId {
+public class ObterComentariosPorMedicoId {
 
 	private final AvaliacaoGateway avaliacaoGateway;
 
-	public Map<String, Object> execute(Long medicoId){
+	public List<String> execute(Long medicoId){
 		return this.avaliacaoGateway
-				.getEstatisticasAvaliacoesByMedicoId(medicoId);
+				.getAllComentariosByMedicoId(medicoId);
 
 	}
 }
