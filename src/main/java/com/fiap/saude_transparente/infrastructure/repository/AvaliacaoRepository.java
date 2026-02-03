@@ -1,5 +1,6 @@
 package com.fiap.saude_transparente.infrastructure.repository;
 
+import com.fiap.saude_transparente.application.presenter.EstatisticaEspecialidadeDTO;
 import com.fiap.saude_transparente.domain.entities.Avaliacao;
 import com.fiap.saude_transparente.domain.gateway.AvaliacaoGateway;
 import com.fiap.saude_transparente.infrastructure.model.AvaliacaoEntity;
@@ -63,6 +64,34 @@ public class AvaliacaoRepository implements AvaliacaoGateway {
 				.query(new ColumnMapRowMapper())
 				.optional()
 				.orElseGet(() -> buscarApenasMedico(medicoId));
+	}
+
+	@Override
+	public List<EstatisticaEspecialidadeDTO> getEstatisticasAvaliacoesByEspecialidade() {
+		String sql = """
+        SELECT 
+            m.especialidade AS especialidade,
+            COALESCE(AVG(a.nota), 0) AS mediaNotas,
+            COALESCE(COUNT(a.id), 0) AS totalAvaliacoes,
+            COALESCE(MIN(a.nota),0) AS notaMinima ,
+            COALESCE(MAX(a.nota),0) AS notaMaxima
+        FROM medico m
+        LEFT JOIN consulta c ON m.id = c.medico_id
+        LEFT JOIN avaliacao a ON c.id = a.consulta_id
+        GROUP BY m.especialidade
+        """;
+
+		return jdbcClient.sql(sql)
+				.query((rs, rowNum) ->
+						new EstatisticaEspecialidadeDTO(
+							rs.getString("especialidade"),
+							rs.getDouble("mediaNotas"),
+							rs.getLong("totalAvaliacoes"),
+							rs.getInt("notaMinima"),
+							rs.getInt("notaMaxima")
+					)
+				)
+				.list();
 	}
 
 	@Override
