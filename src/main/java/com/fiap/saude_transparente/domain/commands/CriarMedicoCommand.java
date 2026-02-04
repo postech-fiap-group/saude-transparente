@@ -9,7 +9,7 @@ public record CriarMedicoCommand(
         String sobrenome,
         String cpf,
         String crm,
-        Especialidades especialidade,
+        String especialidade,
         String endereco,
         String telefone,
         String email,

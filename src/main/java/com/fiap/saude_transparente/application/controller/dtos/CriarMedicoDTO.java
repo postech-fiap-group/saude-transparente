@@ -12,8 +12,8 @@ public record CriarMedicoDTO(
 
 		String sobreNome,
 
-		@NotBlank(message = "O campo especialidade.")
-		Especialidades especialidades,
+		@NotBlank(message = "O campo especialidade é obrigatório.")
+		String especialidades,
 
 		@NotBlank(message = "O campo crm é obrigatório.")
 		String crm,

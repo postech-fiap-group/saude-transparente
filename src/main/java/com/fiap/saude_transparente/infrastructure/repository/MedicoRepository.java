@@ -2,6 +2,7 @@ package com.fiap.saude_transparente.infrastructure.repository;
 
 import com.fiap.saude_transparente.domain.entities.Avaliacao;
 import com.fiap.saude_transparente.domain.entities.Medico;
+import com.fiap.saude_transparente.domain.enums.Especialidades;
 import com.fiap.saude_transparente.domain.exceptions.MedicoNaoEncontradoException;
 import com.fiap.saude_transparente.domain.gateway.MedicoGateway;
 import com.fiap.saude_transparente.infrastructure.model.AvaliacaoEntity;
@@ -55,7 +56,7 @@ public class MedicoRepository implements MedicoGateway {
             medicoEntity.setSobrenome(medico.getSobrenome());
             medicoEntity.setCpf(medico.getCpf());
             medicoEntity.setCrm(medico.getCrm());
-            medicoEntity.setEspecialidade(medico.getEspecialidade());
+            medicoEntity.setEspecialidade(Especialidades.valueOf(medico.getEspecialidade()));
             medicoEntity.setEmail(medico.getEmail());
             medicoEntity.setEndereco(medico.getEndereco());
             medicoEntity.setTelefone(medico.getTelefone());

@@ -17,7 +17,7 @@ public class Medico {
 	private Long id;
 	private String nome;
 	private String sobrenome;
-	private Especialidades especialidade;
+	private String especialidade;
 	private String crm;
 	private String telefone;
 	private String email;
@@ -25,7 +25,7 @@ public class Medico {
 	private LocalDate dataNascimento;
 	private String endereco;
 
-	public static Medico criar(String nome, String sobreNome, Especialidades especialidade, String crm, String telefone, String email, String cpf,String endereco, LocalDate dataNascimento) {
+	public static Medico criar(String nome, String sobreNome, String especialidade, String crm, String telefone, String email, String cpf,String endereco, LocalDate dataNascimento) {
 
 		var medico = new Medico();
 		medico.setNome(nome);
@@ -41,7 +41,7 @@ public class Medico {
 
 	}
 
-	public static Medico alterar(Long id, String nome, String sobreNome, Especialidades especialidade, String crm, String telefone, String email,  String cpf,String endereco, LocalDate dataNascimento) {
+	public static Medico alterar(Long id, String nome, String sobreNome, String especialidade, String crm, String telefone, String email,  String cpf,String endereco, LocalDate dataNascimento) {
 
 		var medico = new Medico();
 		medico.setId(id);

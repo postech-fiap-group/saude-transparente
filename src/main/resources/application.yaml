@@ -37,7 +37,7 @@ springdoc:
     operationsSorter: alpha
     tagsSorter: alpha
     disable-swagger-default-url: true
-    path: /swagger-ui/index.html
+    path: /swagger-ui
     title: FIAP - Saude Transparente API Documentation
     enabled: true
     url: /v3/api-docs
