@@ -19,40 +19,57 @@ public class Medico {
 	private String sobrenome;
 	private String especialidade;
 	private String crm;
-	private String telefone;
+	private String endereco;
 	private String email;
+	private String telefone;
 	private String cpf;
 	private LocalDate dataNascimento;
-	private String endereco;
 
-	public static Medico criar(String nome, String sobreNome, String especialidade, String crm, String telefone, String email, String cpf,String endereco, LocalDate dataNascimento) {
+	public static Medico criar(String nome,
+							   String sobrenome,
+							   String especialidade,
+							   String crm,
+							   String endereco,
+							   String email,
+							   String telefone,
+							   String cpf,
+							   LocalDate dataNascimento) {
 
 		var medico = new Medico();
 		medico.setNome(nome);
-		medico.setSobrenome(sobreNome);
+		medico.setSobrenome(sobrenome);
 		medico.setEspecialidade(especialidade);
 		medico.setCrm(crm);
-		medico.setTelefone(telefone);
-		medico.setEmail(email);
-		medico.setCpf(cpf);
 		medico.setEndereco(endereco);
+		medico.setEmail(email);
+		medico.setTelefone(telefone);
+		medico.setCpf(cpf);
 		medico.setDataNascimento(dataNascimento);
 		return medico;
 
 	}
 
-	public static Medico alterar(Long id, String nome, String sobreNome, String especialidade, String crm, String telefone, String email,  String cpf,String endereco, LocalDate dataNascimento) {
+	public static Medico alterar(Long id,
+								 String nome,
+								 String sobrenome,
+								 String especialidade,
+								 String crm,
+								 String endereco,
+								 String email,
+								 String telefone,
+								 String cpf,
+								 LocalDate dataNascimento) {
 
 		var medico = new Medico();
 		medico.setId(id);
 		medico.setNome(nome);
-		medico.setSobrenome(sobreNome);
+		medico.setSobrenome(sobrenome);
 		medico.setEspecialidade(especialidade);
 		medico.setCrm(crm);
-		medico.setTelefone(telefone);
-		medico.setEmail(email);
-		medico.setCpf(cpf);
 		medico.setEndereco(endereco);
+		medico.setEmail(email);
+		medico.setTelefone(telefone);
+		medico.setCpf(cpf);
 		medico.setDataNascimento(dataNascimento);
 
 		return medico;

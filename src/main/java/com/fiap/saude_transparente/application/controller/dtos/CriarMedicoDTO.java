@@ -1,6 +1,5 @@
 package com.fiap.saude_transparente.application.controller.dtos;
 
-import com.fiap.saude_transparente.domain.enums.Especialidades;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
@@ -10,10 +9,10 @@ public record CriarMedicoDTO(
 		@NotBlank(message = "O campo nome é obrigatório.")
 		String nome,
 
-		String sobreNome,
+		String sobrenome,
 
 		@NotBlank(message = "O campo especialidade é obrigatório.")
-		String especialidades,
+		String especialidade,
 
 		@NotBlank(message = "O campo crm é obrigatório.")
 		String crm,

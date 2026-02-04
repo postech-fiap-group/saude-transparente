@@ -54,12 +54,12 @@ public class MedicoRepository implements MedicoGateway {
         medicoJpaRepository.findById(medico.getId()).map(medicoEntity -> {
             medicoEntity.setNome(medico.getNome());
             medicoEntity.setSobrenome(medico.getSobrenome());
-            medicoEntity.setCpf(medico.getCpf());
+            medicoEntity.setEspecialidade(Especialidades.from(medico.getEspecialidade()));
             medicoEntity.setCrm(medico.getCrm());
-            medicoEntity.setEspecialidade(Especialidades.valueOf(medico.getEspecialidade()));
-            medicoEntity.setEmail(medico.getEmail());
             medicoEntity.setEndereco(medico.getEndereco());
+            medicoEntity.setEmail(medico.getEmail());
             medicoEntity.setTelefone(medico.getTelefone());
+            medicoEntity.setCpf(medico.getCpf());
             medicoEntity.setDataNascimento(medico.getDataNascimento());
             return medicoJpaRepository.save(medicoEntity);
         }).orElseThrow(() -> new MedicoNaoEncontradoException("Medico não encontrada com ID: " + medico.getId()));

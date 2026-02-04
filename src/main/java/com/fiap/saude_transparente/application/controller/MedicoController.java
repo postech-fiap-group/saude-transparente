@@ -75,13 +75,13 @@ public class MedicoController {
 
         var cmd = new CriarMedicoCommand(
                 medicoDTO.nome(),
-                medicoDTO.sobreNome(),
-                medicoDTO.cpf(),
+                medicoDTO.sobrenome(),
+                medicoDTO.especialidade(),
                 medicoDTO.crm(),
-                medicoDTO.especialidades(),
-                medicoDTO.email(),
                 medicoDTO.endereco(),
+                medicoDTO.email(),
                 medicoDTO.telefone(),
+                medicoDTO.cpf(),
                 medicoDTO.dataNascimento());
         criarMedicoService.criar(cmd);
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -107,13 +107,13 @@ public class MedicoController {
 
         var cmd = new AlterarMedicoCommand(id,
                 medicoDTO.nome(),
-                medicoDTO.sobreNome(),
-                medicoDTO.cpf(),
+                medicoDTO.sobrenome(),
+                medicoDTO.especialidade(),
                 medicoDTO.crm(),
-                medicoDTO.especialidades(),
-                medicoDTO.email(),
                 medicoDTO.endereco(),
+                medicoDTO.email(),
                 medicoDTO.telefone(),
+                medicoDTO.cpf(),
                 medicoDTO.dataNascimento());
         this.alterarMedicoService.update(cmd);
         var status = HttpStatus.NO_CONTENT;

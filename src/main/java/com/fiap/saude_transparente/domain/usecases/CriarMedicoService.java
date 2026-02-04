@@ -1,6 +1,5 @@
 package com.fiap.saude_transparente.domain.usecases;
 
-import com.fiap.saude_transparente.application.controller.MedicoController;
 import com.fiap.saude_transparente.domain.commands.CriarMedicoCommand;
 import com.fiap.saude_transparente.domain.entities.Medico;
 import com.fiap.saude_transparente.domain.gateway.MedicoGateway;
@@ -21,11 +20,11 @@ public class CriarMedicoService {
         Medico medico = Medico.criar(medicoCommand.nome(),
                 medicoCommand.sobrenome(),
                 medicoCommand.especialidade(),
-                medicoCommand.cpf(),
                 medicoCommand.crm(),
                 medicoCommand.endereco(),
-                medicoCommand.telefone(),
                 medicoCommand.email(),
+                medicoCommand.telefone(),
+                medicoCommand.cpf(),
                 medicoCommand.dataNascimento());
         this.medicoRepository.criarMedico(medico);
     }

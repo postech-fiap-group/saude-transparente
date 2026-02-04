@@ -21,11 +21,11 @@ public class AlterarMedicoService {
                 medicoCommand.nome(),
                 medicoCommand.sobrenome(),
                 medicoCommand.especialidade(),
-                medicoCommand.cpf(),
                 medicoCommand.crm(),
                 medicoCommand.endereco(),
-                medicoCommand.telefone(),
                 medicoCommand.email(),
+                medicoCommand.telefone(),
+                medicoCommand.cpf(),
                 medicoCommand.dataNascimento());
         this.medicoGateway.atualizarMedico(medico);
 
