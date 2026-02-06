@@ -14,14 +14,17 @@ import java.util.List;
 @RequiredArgsConstructor
 @Repository
 public class ConsultaRepository implements ConsultaGateway {
+
     private final ConsultaJpaRepository consultaJpaRepository;
 
     @Override
-    public List<Consulta> getAllConsultas(int size, int offset) {
-        Pageable pageable = PageRequest.of(0, size).withPage(offset / size);
+    public List<Consulta> getAllConsultas(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
         Page<ConsultaEntity> pageResult = consultaJpaRepository.findAll(pageable);
 
-        return pageResult.getContent().stream().map(ConsultaEntity::toDomain).toList();
+        return pageResult.getContent().stream()
+                .map(ConsultaEntity::toDomain)
+                .toList();
     }
 
     @Override

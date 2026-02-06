@@ -45,6 +45,11 @@ public class PacienteRepository implements PacienteGateway {
     }
 
     @Override
+    public boolean existePacienteById(Long id) {
+        return this.pacienteJpaRepository.existsById(id);
+    }
+
+    @Override
     public Long alterarPaciente(Paciente paciente) {
         PacienteEntity entidadeAtualizada = pacienteJpaRepository.findById(paciente.getId())
                 .map(pacienteEntity -> {

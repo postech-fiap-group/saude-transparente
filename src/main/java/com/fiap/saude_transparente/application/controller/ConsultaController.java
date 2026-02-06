@@ -1,9 +1,11 @@
 package com.fiap.saude_transparente.application.controller;
 
 import com.fiap.saude_transparente.application.controller.dtos.CriarConsultaDTO;
+import com.fiap.saude_transparente.application.controller.dtos.CriarMedicoDTO;
 import com.fiap.saude_transparente.domain.commands.AlterarConsultaCommand;
 import com.fiap.saude_transparente.domain.commands.CriarConsultaCommand;
 import com.fiap.saude_transparente.domain.entities.Consulta;
+import com.fiap.saude_transparente.domain.exceptions.InvalidFieldsException;
 import com.fiap.saude_transparente.domain.usecases.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -27,14 +29,12 @@ public class ConsultaController {
     private final ObterConsultasService obterConsultasService;
     private final ObterConsultaPorIdService obterConsultaPorIdService;
     private final DeletarConsultaService deletarConsultaService;
-    private Validator validator;
+    private final Validator validator;
 
     @PostMapping
     public ResponseEntity<Void> criar(@RequestBody @Valid CriarConsultaDTO dto) {
-        var erros = this.validator.validateObject(dto)
-                .getAllErrors()
-                .stream().map(DefaultMessageSourceResolvable::getDefaultMessage)
-                .collect(Collectors.toSet());
+
+        validatorDto(dto);
 
         this.criarConsultaService.save(new CriarConsultaCommand(
                 dto.pacienteId(),
@@ -51,10 +51,7 @@ public class ConsultaController {
             @PathVariable("id") Long id,
             @RequestBody CriarConsultaDTO dto) {
 
-        var erros = this.validator.validateObject(dto)
-                .getAllErrors()
-                .stream().map(DefaultMessageSourceResolvable::getDefaultMessage)
-                .collect(Collectors.toSet());
+        validatorDto(dto);
 
         var cmd = new AlterarConsultaCommand(
                 id,
@@ -72,9 +69,9 @@ public class ConsultaController {
 
     @GetMapping
     public ResponseEntity<List<Consulta>> getAll(
-            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "page", defaultValue = "0") int page, // Spring prefere começar do 0
             @RequestParam(value = "size", defaultValue = "10") int size) {
-        return ResponseEntity.status(HttpStatus.OK).body(this.obterConsultasService.execute(page, size));
+        return ResponseEntity.ok(this.obterConsultasService.execute(page, size));
     }
 
     @GetMapping("/{id}")
@@ -89,6 +86,14 @@ public class ConsultaController {
             @PathVariable("id") Long id) {
         this.deletarConsultaService.execute(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    private void validatorDto(CriarConsultaDTO consultaDTO) {
+        var erros = this.validator.validateObject(consultaDTO)
+                .getAllErrors()
+                .stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toSet());
+        if (!erros.isEmpty())
+            throw new InvalidFieldsException(erros);
     }
 
 }
