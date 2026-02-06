@@ -6,7 +6,8 @@ import java.util.List;
 
 public interface PacienteGateway {
 
-	List<Paciente> getAllPacientes(int size, int offset);
+	List<Paciente> getAllPacientes(int page, int size);
+
 
 	Paciente getPacienteById(Long id);
 

@@ -1,6 +1,7 @@
 package com.fiap.saude_transparente.infrastructure.repository;
 
 import com.fiap.saude_transparente.domain.entities.Paciente;
+import com.fiap.saude_transparente.domain.exceptions.PacienteNaoEncontradoException;
 import com.fiap.saude_transparente.domain.gateway.PacienteGateway;
 import com.fiap.saude_transparente.infrastructure.model.PacienteEntity;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +19,9 @@ public class PacienteRepository implements PacienteGateway {
     private final PacienteJpaRepository pacienteJpaRepository;
 
     @Override
-    public List<Paciente> getAllPacientes(int size, int offset) {
-        Pageable pageable = PageRequest.of(0, size).withPage(offset / size);
+    public List<Paciente> getAllPacientes(int page, int size) {
+        int pageIndex = page > 0 ? page - 1 : 0;
+        Pageable pageable = PageRequest.of(pageIndex, size);
         Page<PacienteEntity> pageResult = pacienteJpaRepository.findAll(pageable);
 
         return pageResult.getContent()
@@ -28,11 +30,12 @@ public class PacienteRepository implements PacienteGateway {
                 .toList();
     }
 
+
     @Override
     public Paciente getPacienteById(Long id) {
         return this.pacienteJpaRepository.findById(id)
                 .map(PacienteEntity::toDomain)
-                .orElseThrow(() -> new RuntimeException("Paciente não encontrado com ID: " + id));
+                .orElseThrow(() -> new PacienteNaoEncontradoException("Paciente não encontrado com ID: " + id));
     }
 
     @Override
@@ -55,7 +58,7 @@ public class PacienteRepository implements PacienteGateway {
                     return pacienteJpaRepository.save(pacienteEntity);
                 })
                 .orElseThrow(() ->
-                        new RuntimeException("Paciente não encontrado com ID: " + paciente.getId())
+                        new PacienteNaoEncontradoException("Paciente não encontrado com ID: " + paciente.getId())
                 );
 
         return entidadeAtualizada.getId();
@@ -64,7 +67,7 @@ public class PacienteRepository implements PacienteGateway {
     @Override
     public void deletarPaciente(Long id) {
         if (!this.pacienteJpaRepository.existsById(id)) {
-            throw new RuntimeException("Paciente não encontrado com ID: " + id);
+            throw new PacienteNaoEncontradoException("Paciente não encontrado com ID: " + id);
         }
         this.pacienteJpaRepository.deleteById(id);
     }

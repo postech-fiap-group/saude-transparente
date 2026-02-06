@@ -31,7 +31,7 @@ public class PacienteController {
 	private Validator validator;
 
 	@PostMapping
-	public ResponseEntity<Void> criar(@RequestBody @Valid CriarPacienteDTO dto) {
+	public ResponseEntity<String> criar(@RequestBody @Valid CriarPacienteDTO dto) {
 
 		var erros = this.validator.validateObject(dto)
 				.getAllErrors()
@@ -49,11 +49,12 @@ public class PacienteController {
 				dto.dataNascimento()
 		));
 
-		return ResponseEntity.status(HttpStatus.OK).build();
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body("Paciente criado com sucesso! Bem-vindo ao nosso sistema de saúde!");
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Void> alterar(
+	public ResponseEntity<String> alterar(
 			@PathVariable("id") Long id,
 			@RequestBody @Valid CriarPacienteDTO dto) {
 
@@ -76,7 +77,8 @@ public class PacienteController {
 
 		this.alterarPacienteService.save(cmd);
 
-		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+		return ResponseEntity.status(HttpStatus.OK)
+				.body("Paciente alterado com sucesso! Seus dados estão atualizados!");
 	}
 
 	@GetMapping
@@ -99,10 +101,12 @@ public class PacienteController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> delete(
+	public ResponseEntity<String> delete(
 			@PathVariable("id") Long id) {
 
 		this.deletarPacienteService.execute(id);
-		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+
+		return ResponseEntity.status(HttpStatus.OK)
+				.body("Paciente deletado com sucesso!");
 	}
 }
