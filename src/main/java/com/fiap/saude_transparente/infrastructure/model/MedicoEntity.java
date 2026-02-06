@@ -26,22 +26,22 @@ public class MedicoEntity {
 	@Column(name = "especialidade")
 	private Especialidades especialidade;
 	private String crm;
-	private String telefone;
-	private String email;
-	private String cpf;
 	private String endereco;
+	private String email;
+	private String telefone;
+	private String cpf;
 	private LocalDate dataNascimento;
 
 	public MedicoEntity(Medico medico){
 		this.id = medico.getId();
 		this.nome = medico.getNome();
 		this.sobrenome = medico.getSobrenome();
-		this.especialidade = medico.getEspecialidade();
+		this.especialidade = Especialidades.from(medico.getEspecialidade());
 		this.crm = medico.getCrm();
-		this.telefone = medico.getTelefone();
-		this.email = medico.getEmail();
-		this.cpf = medico.getCpf();
 		this.endereco = medico.getEndereco();
+		this.email = medico.getEmail();
+		this.telefone = medico.getTelefone();
+		this.cpf = medico.getCpf();
 		this.dataNascimento = medico.getDataNascimento();
 	}
 
@@ -49,12 +49,12 @@ public class MedicoEntity {
 		var medico = Medico.criar(
 				this.nome,
 				this.sobrenome,
-				this.especialidade,
+				this.especialidade.name(),
 				this.crm,
-				this.telefone,
-				this.email,
-				this.cpf,
 				this.endereco,
+				this.email,
+				this.telefone,
+				this.cpf,
 				this.dataNascimento
 		);
 		medico.setId(this.id);

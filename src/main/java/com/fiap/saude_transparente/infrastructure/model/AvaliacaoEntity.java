@@ -18,10 +18,10 @@ public class AvaliacaoEntity {
 	private Long id;
 
 	@ManyToOne
-	@JoinColumn(name = "consulta_id", referencedColumnName = "id")
+	@JoinColumn(name = "consulta_id", referencedColumnName = "id", insertable = false, updatable = false)
 	private ConsultaEntity consulta;
 
-	@Column(name="consulta_id", insertable = false, updatable = false)
+	@Column(name="consulta_id", insertable = true, updatable = false)
 	private Long consultaId;
 
 	private int nota;
