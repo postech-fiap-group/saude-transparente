@@ -1,11 +1,9 @@
 package com.fiap.saude_transparente.infrastructure.repository;
 
-import com.fiap.saude_transparente.domain.entities.Avaliacao;
 import com.fiap.saude_transparente.domain.entities.Medico;
 import com.fiap.saude_transparente.domain.enums.Especialidades;
 import com.fiap.saude_transparente.domain.exceptions.MedicoNaoEncontradoException;
 import com.fiap.saude_transparente.domain.gateway.MedicoGateway;
-import com.fiap.saude_transparente.infrastructure.model.AvaliacaoEntity;
 import com.fiap.saude_transparente.infrastructure.model.MedicoEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,8 +13,6 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Repository
@@ -46,6 +42,11 @@ public class MedicoRepository implements MedicoGateway {
     public Medico criarMedico(Medico medico) {
         MedicoEntity medicoEntity = medicoJpaRepository.save(new MedicoEntity(medico));
         return medicoEntity.toDomain();
+    }
+
+    @Override
+    public boolean existeMedicoById(Long id) {
+        return this.medicoJpaRepository.existsById(id);
     }
 
     @Override

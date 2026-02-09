@@ -66,12 +66,10 @@ public class MedicoController {
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
     @PostMapping
-    public ResponseEntity<Void> createMedico(@RequestBody CriarMedicoDTO medicoDTO) {
-        var erros = this.validator.validateObject(medicoDTO)
-                .getAllErrors()
-                .stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toSet());
-        if (!erros.isEmpty())
-            throw new InvalidFieldsException(erros);
+    public ResponseEntity<Void> createMedico(
+            @RequestBody CriarMedicoDTO medicoDTO) {
+
+        validatorDto(medicoDTO);
 
         var cmd = new CriarMedicoCommand(
                 medicoDTO.nome(),
@@ -99,11 +97,7 @@ public class MedicoController {
             @PathVariable("id") Long id,
             @RequestBody CriarMedicoDTO medicoDTO) {
 
-        var erros = this.validator.validateObject(medicoDTO)
-                .getAllErrors()
-                .stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toSet());
-        if (!erros.isEmpty())
-            throw new InvalidFieldsException(erros);
+        validatorDto(medicoDTO);
 
         var cmd = new AlterarMedicoCommand(id,
                 medicoDTO.nome(),
@@ -127,9 +121,18 @@ public class MedicoController {
             @ApiResponse(responseCode = "500", description = "Erro interno do servidor")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMedico(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteMedico(
+            @PathVariable("id") Long id) {
         this.deletarMedicoService.deletar(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    private void validatorDto(CriarMedicoDTO medicoDTO) {
+        var erros = this.validator.validateObject(medicoDTO)
+                .getAllErrors()
+                .stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toSet());
+        if (!erros.isEmpty())
+            throw new InvalidFieldsException(erros);
     }
 
 }

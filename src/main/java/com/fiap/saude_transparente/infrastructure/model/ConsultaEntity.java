@@ -19,20 +19,22 @@ public class ConsultaEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@ManyToOne
-	@JoinColumn(name = "paciente_id", referencedColumnName = "id")
+	@JoinColumn(name = "paciente_id", referencedColumnName = "id", insertable = false, updatable = false)
 	private PacienteEntity paciente;
-	@Column(name="paciente_id", insertable = false, updatable = false)
+
+	@Column(name="paciente_id")
 	private Long pacienteId;
+
 	@ManyToOne
-	@JoinColumn(name = "medico_id", referencedColumnName = "id")
+	@JoinColumn(name = "medico_id", referencedColumnName = "id", insertable = false, updatable = false)
 	private MedicoEntity medico;
-	@Column(name="medico_id", insertable = false, updatable = false)
+
+	@Column(name="medico_id")
 	private Long medicoId;
 	private LocalDateTime dataConsulta;
 	private String motivo;
 
 	public ConsultaEntity(Consulta consulta){
-		this.id = consulta.getId();
 		this.pacienteId = consulta.getPacienteId();
 		this.medicoId = consulta.getMedicoId();
 		this.dataConsulta = consulta.getDataConsulta();

@@ -4,6 +4,7 @@ import com.fiap.saude_transparente.application.controller.dtos.CriarPacienteDTO;
 import com.fiap.saude_transparente.domain.commands.AlterarPacienteCommand;
 import com.fiap.saude_transparente.domain.commands.CriarPacienteCommand;
 import com.fiap.saude_transparente.domain.entities.Paciente;
+import com.fiap.saude_transparente.domain.exceptions.InvalidFieldsException;
 import com.fiap.saude_transparente.domain.usecases.*;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -28,16 +29,12 @@ public class PacienteController {
 	private final ObterPacientesService obterPacientesService;
 	private final ObterPacientePorIdService obterPacientePorIdService;
 	private final DeletarPacienteService deletarPacienteService;
-	private Validator validator;
+	private final Validator validator;
 
 	@PostMapping
 	public ResponseEntity<String> criar(@RequestBody @Valid CriarPacienteDTO dto) {
 
-		var erros = this.validator.validateObject(dto)
-				.getAllErrors()
-				.stream()
-				.map(DefaultMessageSourceResolvable::getDefaultMessage)
-				.collect(Collectors.toSet());
+		validatorDto(dto);
 
 		this.criarPacienteService.save(new CriarPacienteCommand(
 				dto.nome(),
@@ -49,8 +46,7 @@ public class PacienteController {
 				dto.dataNascimento()
 		));
 
-		return ResponseEntity.status(HttpStatus.CREATED)
-				.body("Paciente criado com sucesso! Bem-vindo ao nosso sistema de saúde!");
+		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
 	@PutMapping("/{id}")
@@ -58,11 +54,7 @@ public class PacienteController {
 			@PathVariable("id") Long id,
 			@RequestBody @Valid CriarPacienteDTO dto) {
 
-		var erros = this.validator.validateObject(dto)
-				.getAllErrors()
-				.stream()
-				.map(DefaultMessageSourceResolvable::getDefaultMessage)
-				.collect(Collectors.toSet());
+		validatorDto(dto);
 
 		var cmd = new AlterarPacienteCommand(
 				id,
@@ -77,8 +69,7 @@ public class PacienteController {
 
 		this.alterarPacienteService.save(cmd);
 
-		return ResponseEntity.status(HttpStatus.OK)
-				.body("Paciente alterado com sucesso! Seus dados estão atualizados!");
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 
 	@GetMapping
@@ -86,18 +77,14 @@ public class PacienteController {
 			@RequestParam(value = "page", defaultValue = "1") int page,
 			@RequestParam(value = "size", defaultValue = "10") int size) {
 
-		return ResponseEntity
-				.status(HttpStatus.OK)
-				.body(this.obterPacientesService.execute(page, size));
+		return ResponseEntity.status(HttpStatus.OK).body(this.obterPacientesService.execute(page, size));
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<Paciente> getById(
 			@PathVariable("id") Long id) {
 
-		return ResponseEntity
-				.status(HttpStatus.OK)
-				.body(this.obterPacientePorIdService.execute(id));
+		return ResponseEntity.status(HttpStatus.OK).body(this.obterPacientePorIdService.execute(id));
 	}
 
 	@DeleteMapping("/{id}")
@@ -106,7 +93,14 @@ public class PacienteController {
 
 		this.deletarPacienteService.execute(id);
 
-		return ResponseEntity.status(HttpStatus.OK)
-				.body("Paciente deletado com sucesso!");
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+	}
+
+	private void validatorDto(CriarPacienteDTO pacienteDTO) {
+		var erros = this.validator.validateObject(pacienteDTO)
+				.getAllErrors()
+				.stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toSet());
+		if (!erros.isEmpty())
+			throw new InvalidFieldsException(erros);
 	}
 }

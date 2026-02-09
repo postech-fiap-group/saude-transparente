@@ -9,6 +9,7 @@ public interface MedicoGateway {
 	Medico getMedicoById(Long id);
 	List<Medico> getAllMedicos(int size, int offset);
 	Medico criarMedico(Medico medico);
+	boolean existeMedicoById(Long id);
 	void atualizarMedico(Medico medico);
 	void deletarMedico(Long id);
 

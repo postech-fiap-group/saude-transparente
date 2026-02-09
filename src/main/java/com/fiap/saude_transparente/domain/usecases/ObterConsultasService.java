@@ -13,7 +13,7 @@ public class ObterConsultasService {
 
     private final ConsultaGateway consultaGateway;
 
-    public List<Consulta> execute(int size, int offset) {
-        return consultaGateway.getAllConsultas(size, offset);
+    public List<Consulta> execute(int page, int size) {
+        return consultaGateway.getAllConsultas(page, size);
     }
 }
