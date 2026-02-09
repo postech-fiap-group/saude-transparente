@@ -124,7 +124,7 @@ public class MedicoController {
     public ResponseEntity<Void> deleteMedico(
             @PathVariable("id") Long id) {
         this.deletarMedicoService.deletar(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     private void validatorDto(CriarMedicoDTO medicoDTO) {

@@ -46,8 +46,7 @@ public class PacienteController {
 				dto.dataNascimento()
 		));
 
-		return ResponseEntity.status(HttpStatus.CREATED)
-				.body("Paciente criado com sucesso! Bem-vindo ao nosso sistema de saúde!");
+		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 
 	@PutMapping("/{id}")
@@ -70,8 +69,7 @@ public class PacienteController {
 
 		this.alterarPacienteService.save(cmd);
 
-		return ResponseEntity.status(HttpStatus.OK)
-				.body("Paciente alterado com sucesso! Seus dados estão atualizados!");
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 
 	@GetMapping
@@ -95,7 +93,7 @@ public class PacienteController {
 
 		this.deletarPacienteService.execute(id);
 
-		return ResponseEntity.status(HttpStatus.OK).body("Paciente deletado com sucesso!");
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}
 
 	private void validatorDto(CriarPacienteDTO pacienteDTO) {
